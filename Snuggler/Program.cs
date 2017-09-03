@@ -23,30 +23,36 @@ namespace Snuggler
             while(pa == null || pa.MainWindowHandle == IntPtr.Zero);
             Console.WriteLine("{0}: 0x{1:x}", pa.ProcessName, pa.MainWindowHandle.ToInt64());
             Initialize(pa.MainWindowHandle, 176, 64);
-            ulong tableId = 0;
-            for(;;)
+            try
             {
-                try
+                ulong tableId = 0;
+                for(;;)
                 {
-                    Thread.Sleep(110);
-                    ulong nextTableId = GetTableId(560, 16);
-                    if(nextTableId == 0)
+                    try
                     {
-                        // The pinball application closed.
+                        Thread.Sleep(110);
+                        ulong nextTableId = GetTableId(560, 16);
+                        if(nextTableId == 0)
+                        {
+                            // The pinball application closed.
+                            break;
+                        }
+                        if(tableId != nextTableId)
+                        {
+                            tableId = nextTableId;
+                            Console.WriteLine(tableId);
+                        }
+                    }
+                    catch
+                    {
                         break;
                     }
-                    if(tableId != nextTableId)
-                    {
-                        tableId = nextTableId;
-                        Console.WriteLine(tableId);
-                    }
-                }
-                catch
-                {
-                    break;
                 }
             }
-            Complete();
+            finally
+            {
+                Complete();
+            }
         }
 
         // EXTERN_C SNUGGLING_API void Initialize(HWND window, int width, int height);
