@@ -56,15 +56,15 @@ namespace Snuggler
         }
 
         // EXTERN_C SNUGGLING_API void Initialize(HWND window, int width, int height);
-        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
         public static extern void Initialize([In] IntPtr window, int width, int height);
 
         // EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y);
-        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
         public static extern ulong GetTableId(int x, int y);
 
         // EXTERN_C SNUGGLING_API void Complete();
-        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
         public static extern void Complete();
     }
 }

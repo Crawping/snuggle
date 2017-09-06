@@ -10,7 +10,7 @@ static int x, y, width, height;
 static HBITMAP bitmap;
 static HGDIOBJ previous;
 
-EXTERN_C SNUGGLING_API void Initialize(HWND window, int width, int height) {
+EXTERN_C SNUGGLING_API HRESULT Initialize(HWND window, int width, int height) {
 	// Configure file-level variables.
 	if(::window) {
 		Complete();
@@ -35,9 +35,10 @@ EXTERN_C SNUGGLING_API void Initialize(HWND window, int width, int height) {
 	info.bmiHeader.biCompression= BI_RGB;
 	bitmap= CreateDIBSection(targetContext, &info, DIB_RGB_COLORS, &data, 0, 0);
 	previous= SelectObject(targetContext, bitmap);
+	return S_OK;
 }
 
-EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y) {
+EXTERN_C SNUGGLING_API HRESULT GetTableId(int x, int y, table_id_t* rv) {
 	// Copy the table's banner image into the memory context.
 	if(BitBlt(targetContext, 0, 0, width, height, sourceContext, x, y, SRCCOPY)) {
 #ifdef _DEBUG
@@ -62,19 +63,20 @@ EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y) {
 #endif
 
 		// Hash the image data into an identifier and return it.
-		table_id_t table_id= HashData(data, size);
-		return table_id;
+		*rv= HashData(data, size);
+		return S_OK;
 	}
 
 	// An error occurred copying the image.  This happens usually because the
 	// Pinball Arcade window closed.
-	return 0;
+	return E_FAIL;
 }
 
-EXTERN_C SNUGGLING_API void Complete() {
+EXTERN_C SNUGGLING_API HRESULT Complete() {
 	// Clean up all graphical objects.
 	SelectObject(targetContext, previous);
 	DeleteObject(bitmap);
 	DeleteDC(targetContext);
 	ReleaseDC(window, sourceContext);
+	return S_OK;
 }
