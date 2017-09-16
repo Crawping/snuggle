@@ -24,6 +24,9 @@
     <ClInclude Include="Snuggling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Duplicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hasher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Duplicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

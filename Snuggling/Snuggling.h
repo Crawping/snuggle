@@ -16,6 +16,6 @@ using table_id_t= unsigned long long;
 
 table_id_t HashData(void* data, unsigned size);
 
-EXTERN_C SNUGGLING_API HRESULT Initialize(HWND window, int width, int height);
-EXTERN_C SNUGGLING_API HRESULT GetTableId(int x, int y, table_id_t* rv);
+EXTERN_C SNUGGLING_API HRESULT Initialize();
+EXTERN_C SNUGGLING_API HRESULT GetTableId(int x, int y, int width, int height, table_id_t* rv);
 EXTERN_C SNUGGLING_API HRESULT Complete();

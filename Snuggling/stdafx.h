@@ -22,6 +22,10 @@
 #include <windows.h>
 #include <wincrypt.h>
 #include <tchar.h>
+#include <d3d11_2.h>
+#include <dxgi1_3.h>
+#include <wrl.h>
+#include <comdef.h>
 
 // Standard library include directives
 #undef max

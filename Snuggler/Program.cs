@@ -22,7 +22,7 @@ namespace Snuggler
             }
             while(pa == null || pa.MainWindowHandle == IntPtr.Zero);
             Console.WriteLine("{0}: 0x{1:x}", pa.ProcessName, pa.MainWindowHandle.ToInt64());
-            Initialize(pa.MainWindowHandle, 176, 64);
+            Initialize();
             try
             {
                 ulong tableId = 0;
@@ -31,7 +31,7 @@ namespace Snuggler
                     try
                     {
                         Thread.Sleep(110);
-                        ulong nextTableId = GetTableId(560, 16);
+                        ulong nextTableId = GetTableId(176, 64, 560, 16);
                         if(nextTableId == 0)
                         {
                             // The pinball application closed.
@@ -55,13 +55,13 @@ namespace Snuggler
             }
         }
 
-        // EXTERN_C SNUGGLING_API void Initialize(HWND window, int width, int height);
+        // EXTERN_C SNUGGLING_API void Initialize();
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
-        public static extern void Initialize([In] IntPtr window, int width, int height);
+        public static extern void Initialize();
 
-        // EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y);
+        // EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y, int width, int height);
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
-        public static extern ulong GetTableId(int x, int y);
+        public static extern ulong GetTableId(int x, int y, int width, int height);
 
         // EXTERN_C SNUGGLING_API void Complete();
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
