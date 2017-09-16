@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -31,7 +30,7 @@ namespace Snuggler
                     try
                     {
                         Thread.Sleep(110);
-                        ulong nextTableId = GetTableId(176, 64, 560, 16);
+                        ulong nextTableId = GetTableId(8, 256, 64);
                         if(nextTableId == 0)
                         {
                             // The pinball application closed.
@@ -59,9 +58,9 @@ namespace Snuggler
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
         public static extern void Initialize();
 
-        // EXTERN_C SNUGGLING_API table_id_t GetTableId(int x, int y, int width, int height);
+        // EXTERN_C SNUGGLING_API table_id_t GetTableId(int y, int width, int height);
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]
-        public static extern ulong GetTableId(int x, int y, int width, int height);
+        public static extern ulong GetTableId(int y, int width, int height);
 
         // EXTERN_C SNUGGLING_API void Complete();
         [DllImport("Snuggling.dll", CallingConvention = CallingConvention.Cdecl, PreserveSig = false)]

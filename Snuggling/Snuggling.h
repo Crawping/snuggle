@@ -12,10 +12,15 @@
 # define SNUGGLING_API __declspec(dllimport)
 #endif
 
+#ifndef _DEBUG
+#	undef OutputDebugString
+#	define OutputDebugString(_) ((void)0)
+#endif
+
 using table_id_t= unsigned long long;
 
 table_id_t HashData(void* data, unsigned size);
 
 EXTERN_C SNUGGLING_API HRESULT Initialize();
-EXTERN_C SNUGGLING_API HRESULT GetTableId(int x, int y, int width, int height, table_id_t* rv);
+EXTERN_C SNUGGLING_API HRESULT GetTableId(int y, int width, int height, table_id_t* rv);
 EXTERN_C SNUGGLING_API HRESULT Complete();

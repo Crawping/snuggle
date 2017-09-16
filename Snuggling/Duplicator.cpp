@@ -40,7 +40,7 @@ Duplicator::Duplicator() {
 
 Duplicator::~Duplicator() {}
 
-table_id_t Duplicator::Doit(int x, int y, int width, int height) {
+table_id_t Duplicator::Doit(int y, int width, int height) {
 	HRESULT hr;
 	if(pDuplication == nullptr) {
 		hr= pOutput1->DuplicateOutput(pDevice.Get(), &pDuplication);
@@ -48,15 +48,28 @@ table_id_t Duplicator::Doit(int x, int y, int width, int height) {
 	}
 	DXGI_OUTDUPL_FRAME_INFO info;
 	ComPtr<IDXGIResource> pResource;
-	hr= pDuplication->AcquireNextFrame(0, &info, &pResource);
-	if(hr == DXGI_ERROR_ACCESS_LOST) {
+	hr= pDuplication->AcquireNextFrame(110, &info, &pResource);
+	while(hr == DXGI_ERROR_WAIT_TIMEOUT) {
+		OutputDebugString(_T("wait time-out\n"));
+		hr= pDuplication->AcquireNextFrame(110, &info, &pResource);
+	}
+	DXGI_OUTDUPL_DESC ddesc;
+	pDuplication->GetDesc(&ddesc);
+#ifdef _DEBUG
+	TCHAR sz[999];
+	wsprintf(sz, _T("w %d, h %d\n"), ddesc.ModeDesc.Width, ddesc.ModeDesc.Height);
+	OutputDebugString(sz);
+#endif
+	while(hr == DXGI_ERROR_ACCESS_LOST) {
+		OutputDebugString(_T("access lost\n"));
+		Sleep(1100);
 		hr= pOutput1->DuplicateOutput(pDevice.Get(), &pDuplication);
 		ThrowIfFailed(hr);
 		hr= pDuplication->AcquireNextFrame(0, &info, &pResource);
 	}
+	ThrowIfFailed(hr);
 	LPCTSTR s= info.LastPresentTime.QuadPart ? _T("updated\n") : _T("not updated\n");
 	OutputDebugString(s);
-	ThrowIfFailed(hr);
 	// https://stackoverflow.com/questions/22383209/id3d11texture2d-to-id2d1bitmap-is-it-possible/22397989#22397989
 	ComPtr<ID3D11Texture2D> pSourceTexture;
 	hr= pResource.As(&pSourceTexture);
@@ -76,9 +89,9 @@ table_id_t Duplicator::Doit(int x, int y, int width, int height) {
 	box.front= 0;
 	box.back= 1;
 	box.top= y;
-	box.bottom= y + height;
-	box.left= x;
-	box.right= x + width;
+	box.bottom= y + textureDesc.Height;
+	box.left= (ddesc.ModeDesc.Width - textureDesc.Width) / 2;
+	box.right= box.left + textureDesc.Width;
 	pContext->CopySubresourceRegion(pTargetTexture.Get(), 0, 0, 0, 0, pSourceTexture.Get(), 0, &box);
 	ComPtr<IDXGISurface> pSurface;
 	hr= pTargetTexture.As(&pSurface);

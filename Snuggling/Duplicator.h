@@ -4,7 +4,7 @@ class Duplicator {
 public:
 	Duplicator();
 	~Duplicator();
-	table_id_t Doit(int x, int y, int width, int height);
+	table_id_t Doit(int y, int width, int height);
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
