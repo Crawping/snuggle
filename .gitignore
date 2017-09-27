@@ -3,4 +3,5 @@ Debug
 ipch
 bin
 obj
+x64
 *.VC.*
