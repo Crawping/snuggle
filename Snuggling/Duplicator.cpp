@@ -68,8 +68,7 @@ table_id_t Duplicator::Doit(int y, int width, int height) {
 		hr= pDuplication->AcquireNextFrame(0, &info, &pResource);
 	}
 	ThrowIfFailed(hr);
-	LPCTSTR s= info.LastPresentTime.QuadPart ? _T("updated\n") : _T("not updated\n");
-	OutputDebugString(s);
+	OutputDebugString(info.LastPresentTime.QuadPart ? _T("updated\n") : _T("not updated\n"));
 	// https://stackoverflow.com/questions/22383209/id3d11texture2d-to-id2d1bitmap-is-it-possible/22397989#22397989
 	ComPtr<ID3D11Texture2D> pSourceTexture;
 	hr= pResource.As(&pSourceTexture);
