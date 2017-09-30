@@ -32,7 +32,8 @@ namespace Snuggler
         public MainWindow()
         {
             // Read the mapping of table codes to image paths.
-            var strings = System.IO.File.ReadAllLines(@"C:\Users\Chris\Documents\CodesToPaths.txt");
+            var path = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CodesToPaths.txt");
+            var strings = System.IO.File.ReadAllLines(path);
             var q = from s in strings
                     let p = s.Split(new[] { '\t', ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
                     where p.Length >= 2 && p[0].All(c => Char.IsDigit(c))
